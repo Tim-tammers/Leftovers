@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.sqlite3
+
+# Virtual environments
+.env/
+.venv/
+env/
+venv/
+ENV/
+
+# Environment variables
+*.env
+
+# IDE / Editors
+.vscode/
+.idea/
+
+# Streamlit cache
+.streamlit/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
