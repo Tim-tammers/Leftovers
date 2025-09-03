@@ -7,11 +7,11 @@ from openai import OpenAI
 import base64 
 
 # API Keys (store securely, e.g., as environment variables)
-GROK_API_KEY = "xai-MIIgCYgaAdLQX2liwz313NIAZ9zifcq2wYJAIkPcZyR1yxbj5l1mRAWNqo17vuTff2r0A5scL1SY27xU"  
+GROK_API_KEY = ""  
 GROK_API_URL = "https://api.x.ai/v1/chat/completions"  # Check xAI docs for exact endpoint
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = ""
 OPENAI_IMAGE_URL = "https://api.openai.com/v1/images/generations"
-OPENAI_PROJECT_ID = "proj_BK9oDCoawTz32F64bftmMfyR"
+OPENAI_PROJECT_ID = ""
 client = OpenAI(api_key=OPENAI_API_KEY)
 # Function to generate recipe using Grok API
 def generate_recipe(ingredients: list):
