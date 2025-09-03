@@ -72,7 +72,7 @@ def generate_image(dish_title: str):
 
 # --- STREAMLIT APP ---
 
-st.title("🧑‍🍳 Leftovers!")
+st.title("🧑‍🍳 Leftoverz!")
 
 # --- Ingredients Input Table ---
 if "ingredients" not in st.session_state:
