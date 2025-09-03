@@ -8,9 +8,18 @@ import base64
 from dotenv import load_dotenv
 
 # API Keys (store securely, e.g., as environment variables)
-GROK_API_KEY = os.getenv("GROK_API_KEY")
+
+
+if "OPENAI_API_KEY" in st.secrets:
+    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+    GROK_API_KEY = st.secrets["GROK_API_KEY"]
+else:
+    from dotenv import load_dotenv
+    load_dotenv()
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    GROK_API_KEY = os.getenv("GROK_API_KEY")
+
 GROK_API_URL = "https://api.x.ai/v1/chat/completions"  # Check xAI docs for exact endpoint
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_IMAGE_URL = "https://api.openai.com/v1/images/generations"
 
 client = OpenAI(api_key=OPENAI_API_KEY)
