@@ -89,6 +89,7 @@ if "ingredients" not in st.session_state:
     st.session_state["ingredients"] = [{"item": "", "quantity": "", "unit": ""}]
 
 st.subheader("Ingredients")
+st.write("Input some of your leftover ingredients and let us come up with a (probably weird) recipe for you.")
 
 # Function to remove an ingredient
 def remove_ingredient(index):
