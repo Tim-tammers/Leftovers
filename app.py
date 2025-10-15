@@ -10,14 +10,24 @@ from dotenv import load_dotenv
 # API Keys (store securely, e.g., as environment variables)
 
 
-if "OPENAI_API_KEY" in st.secrets:
-    OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
-    GROK_API_KEY = st.secrets["GROK_API_KEY"]
-else:
-    from dotenv import load_dotenv
+try:
+    OPENAI_API_KEY = st.secrets.get("OPENAI_API_KEY")
+    GROK_API_KEY = st.secrets.get("GROK_API_KEY")
+except Exception:
+    OPENAI_API_KEY = None
+    GROK_API_KEY = None
+
+# Fallback to .env if not found
+if not OPENAI_API_KEY or not GROK_API_KEY:
     load_dotenv()
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    GROK_API_KEY = os.getenv("GROK_API_KEY")
+    OPENAI_API_KEY = OPENAI_API_KEY or os.getenv("OPENAI_API_KEY")
+    GROK_API_KEY = GROK_API_KEY or os.getenv("GROK_API_KEY")
+
+# Optional: sanity check
+if not OPENAI_API_KEY:
+    st.error("Missing OpenAI API key. Please set it in secrets or .env.")
+if not GROK_API_KEY:
+    st.warning("Missing Grok API key (some features may not work).")
 
 GROK_API_URL = "https://api.x.ai/v1/chat/completions"  # Check xAI docs for exact endpoint
 OPENAI_IMAGE_URL = "https://api.openai.com/v1/images/generations"
@@ -71,7 +81,7 @@ def generate_image(dish_title: str):
         return None
 
 # --- STREAMLIT APP ---
-
+st.markdown("[☕ Buy me a coffee](https://buymeacoffee.com/tleary98g)")
 st.title("🧑‍🍳 Leftoverz!")
 
 # --- Ingredients Input Table ---
@@ -84,22 +94,42 @@ st.subheader("Ingredients")
 def remove_ingredient(index):
     st.session_state.ingredients.pop(index)
 
+
+
+st.markdown("""
+<style>
+@media (max-width: 768px) {
+    .desktop-only { display: none; }
+}
+@media (min-width: 769px) {
+    .desktop-only { display: block; height: 0.5rem; }
+}
+</style>
+""", unsafe_allow_html=True)
 # Display each ingredient row
 for i, ing in enumerate(st.session_state.ingredients):
-    cols = st.columns([4, 2, 1])  # Quantity, Unit, Item, Remove button
+    cols = st.columns([4, 2, 1])  # Item, Quantity, Remove button
 
-    ing["item"] = cols[0].text_input("Item", value=ing["item"], key=f"item_{i}")
-    ing["quantity"] = cols[1].text_input("Quantity", value=ing["quantity"], key=f"qty_{i}")
-    # ing["unit"] = cols[2].text_input("Unit", value=ing["unit"], key=f"unit_{i}")
-    
-    # Remove button with callback
+    ing["item"] = cols[0].text_input(
+        "Item",
+        value=ing["item"],
+        key=f"item_{i}",
+        
+    )
+    ing["quantity"] = cols[1].text_input(
+        "Quantity",
+        value=ing["quantity"],
+        key=f"qty_{i}",
+       
+    )
+
+    cols[2].markdown('<br class="desktop-only">', unsafe_allow_html=True)  # Add vertical spacing
     cols[2].button(
         "❌",
         key=f"remove_{i}",
         on_click=remove_ingredient,
-        args=(i,)
+        args=(i,),
     )
-
 # Add new ingredient row
 if st.button("➕ Add Ingredient"):
     st.session_state.ingredients.append({"item": "", "quantity": "", "unit": ""})
@@ -124,3 +154,5 @@ if st.button("Generate Recipe & Image", disabled=not has_ingredient):
         st.text(recipe)
     else:
         st.warning("⚠️ Please fill in all ingredient items.")
+
+       
